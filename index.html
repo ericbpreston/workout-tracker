@@ -2,24 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Workout Tracker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f0f0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
     <header>
         <h1>🏋️ Workout Tracker</h1>
         <div class="header-actions">
             <select id="weekSelector"></select>
-            <button id="exportBtn" class="btn-secondary">Export Data</button>
-            <button id="clearWeekBtn" class="btn-danger">Clear Week</button>
         </div>
     </header>
     
-    <main class="kanban-board" id="board">
-        <!-- Days will be injected by JS -->
+    <nav class="day-tabs" id="dayTabs">
+        <button class="day-tab active" data-day="monday">Mon</button>
+        <button class="day-tab" data-day="tuesday">Tue</button>
+        <button class="day-tab" data-day="thursday">Thu</button>
+        <button class="day-tab" data-day="friday">Fri</button>
+    </nav>
+
+    <main class="workout-view" id="workoutView">
+        <!-- Single day view will be injected by JS -->
     </main>
 
     <div id="toast" class="toast"></div>

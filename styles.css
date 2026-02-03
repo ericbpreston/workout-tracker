@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 :root {
@@ -15,6 +16,7 @@
     --accent: #3b82f6;
     --accent-hover: #2563eb;
     --success: #22c55e;
+    --success-bg: rgba(34, 197, 94, 0.15);
     --warning: #f59e0b;
     --danger: #ef4444;
     --border: #333;
@@ -24,16 +26,23 @@
     --friday: #f59e0b;
 }
 
+html {
+    font-size: 16px;
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
     min-height: 100vh;
+    min-height: -webkit-fill-available;
     line-height: 1.5;
+    overflow-x: hidden;
 }
 
+/* Header */
 header {
-    padding: 1.5rem 2rem;
+    padding: 1rem 1.25rem;
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border);
     display: flex;
@@ -45,171 +54,165 @@ header {
 }
 
 header h1 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
 }
 
 .header-actions {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.5rem;
     align-items: center;
 }
 
-select, button {
+select {
     font-family: inherit;
     font-size: 0.875rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
     border: 1px solid var(--border);
     background: var(--bg-card);
     color: var(--text-primary);
     cursor: pointer;
+    max-width: 180px;
+}
+
+/* Day Tabs */
+.day-tabs {
+    display: flex;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 56px;
+    z-index: 99;
+}
+
+.day-tab {
+    flex: 1;
+    padding: 0.875rem 1rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
     transition: all 0.2s;
 }
 
-select:hover, button:hover {
-    border-color: var(--accent);
+.day-tab:hover {
+    color: var(--text-primary);
+    background: var(--bg-card);
 }
 
-.btn-secondary {
-    background: var(--accent);
-    border-color: var(--accent);
+.day-tab.active {
+    color: var(--text-primary);
+    border-bottom-color: var(--accent);
 }
 
-.btn-secondary:hover {
-    background: var(--accent-hover);
+.day-tab[data-day="monday"].active { border-bottom-color: var(--monday); }
+.day-tab[data-day="tuesday"].active { border-bottom-color: var(--tuesday); }
+.day-tab[data-day="thursday"].active { border-bottom-color: var(--thursday); }
+.day-tab[data-day="friday"].active { border-bottom-color: var(--friday); }
+
+/* Main Workout View */
+.workout-view {
+    padding: 1rem;
+    padding-bottom: 6rem;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-.btn-danger {
-    background: transparent;
-    border-color: var(--danger);
-    color: var(--danger);
-}
-
-.btn-danger:hover {
-    background: var(--danger);
-    color: white;
-}
-
-/* Kanban Board */
-.kanban-board {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    padding: 1.5rem;
-    min-height: calc(100vh - 80px);
-    align-items: start;
-}
-
-@media (max-width: 1200px) {
-    .kanban-board {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .kanban-board {
-        grid-template-columns: 1fr;
-    }
-    
-    header {
-        flex-direction: column;
-        gap: 1rem;
-    }
-}
-
-/* Day Column */
-.day-column {
+/* Day Header */
+.day-header-card {
     background: var(--bg-secondary);
     border-radius: 1rem;
-    overflow: hidden;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
     border: 1px solid var(--border);
 }
 
-.day-header {
-    padding: 1rem 1.25rem;
-    font-weight: 600;
-    font-size: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
+.day-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
 }
 
-.day-header .day-focus {
-    font-size: 0.75rem;
-    font-weight: 400;
+.day-subtitle {
     color: var(--text-secondary);
-    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
 }
 
-.day-header .completion {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 1rem;
-    background: var(--bg-input);
-}
-
-.day-column[data-day="monday"] .day-header { border-left: 4px solid var(--monday); }
-.day-column[data-day="tuesday"] .day-header { border-left: 4px solid var(--tuesday); }
-.day-column[data-day="thursday"] .day-header { border-left: 4px solid var(--thursday); }
-.day-column[data-day="friday"] .day-header { border-left: 4px solid var(--friday); }
-
-.day-content {
-    padding: 0.75rem;
+.day-stats {
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-height: calc(100vh - 200px);
-    overflow-y: auto;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.stat-box {
+    flex: 1;
+    min-width: 100px;
+    background: var(--bg-card);
+    border-radius: 0.75rem;
+    padding: 0.875rem;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.stat-value.progress {
+    color: var(--accent);
+}
+
+.stat-value.volume {
+    color: var(--success);
 }
 
 /* Block */
 .block {
-    background: var(--bg-card);
-    border-radius: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
     overflow: hidden;
 }
 
 .block-header {
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.25rem;
     font-weight: 600;
-    font-size: 0.85rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--bg-input);
-    transition: background 0.2s;
+    font-size: 1rem;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
 }
 
-.block-header:hover {
-    background: #363636;
-}
-
-.block-header .chevron {
-    transition: transform 0.2s;
-}
-
-.block.collapsed .block-header .chevron {
-    transform: rotate(-90deg);
-}
-
-.block.collapsed .block-content {
-    display: none;
+.block[data-type="warmup"] .block-header {
+    background: rgba(139, 92, 246, 0.2);
+    border-left: 4px solid var(--monday);
 }
 
 .block-content {
-    padding: 0.5rem;
+    padding: 0.75rem;
 }
 
 /* Exercise Card */
 .exercise {
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    margin-bottom: 0.5rem;
-    background: var(--bg-secondary);
-    border: 1px solid transparent;
+    background: var(--bg-card);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border: 2px solid transparent;
     transition: border-color 0.2s;
 }
 
@@ -217,91 +220,118 @@ select:hover, button:hover {
     margin-bottom: 0;
 }
 
-.exercise:hover {
-    border-color: var(--border);
-}
-
 .exercise.completed {
     border-color: var(--success);
-    background: rgba(34, 197, 94, 0.1);
+    background: var(--success-bg);
 }
 
 .exercise-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    gap: 0.5rem;
 }
 
 .exercise-name {
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 1rem;
+    line-height: 1.3;
     flex: 1;
 }
 
-.exercise-sets {
+.exercise-prescription {
     font-size: 0.75rem;
     color: var(--text-secondary);
     background: var(--bg-input);
-    padding: 0.2rem 0.5rem;
-    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.exercise-info {
+    margin-bottom: 1rem;
 }
 
 .exercise-why {
-    font-size: 0.75rem;
-    color: var(--text-muted);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
     margin-bottom: 0.5rem;
-    display: none;
+    padding-left: 1.25rem;
+    position: relative;
 }
 
-.exercise:hover .exercise-why,
-.exercise.show-details .exercise-why {
-    display: block;
+.exercise-why::before {
+    content: "💡";
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .exercise-technique {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     font-style: italic;
-    margin-bottom: 0.75rem;
-    display: none;
+    padding-left: 1.25rem;
+    position: relative;
 }
 
-.exercise:hover .exercise-technique,
-.exercise.show-details .exercise-technique {
-    display: block;
+.exercise-technique::before {
+    content: "📝";
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
-/* Input Row */
-.input-row {
+/* Sets Grid */
+.sets-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.set-row {
     display: flex;
     gap: 0.5rem;
     align-items: center;
 }
 
-.input-group {
-    flex: 1;
+.set-number {
+    width: 32px;
+    height: 32px;
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--bg-input);
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
-.input-group label {
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.set-inputs {
+    flex: 1;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.input-group {
+    flex: 1;
+    position: relative;
 }
 
 .input-group input {
     width: 100%;
-    padding: 0.5rem;
-    border-radius: 0.375rem;
+    padding: 0.625rem 0.5rem;
+    padding-top: 1.25rem;
+    border-radius: 0.5rem;
     border: 1px solid var(--border);
     background: var(--bg-input);
     color: var(--text-primary);
     font-family: inherit;
-    font-size: 0.875rem;
+    font-size: 1rem;
     text-align: center;
 }
 
@@ -314,9 +344,21 @@ select:hover, button:hover {
     color: var(--text-muted);
 }
 
+.input-group label {
+    position: absolute;
+    top: 0.375rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+}
+
 .check-btn {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 2px solid var(--border);
     background: transparent;
@@ -326,7 +368,6 @@ select:hover, button:hover {
     justify-content: center;
     transition: all 0.2s;
     flex-shrink: 0;
-    margin-top: 1rem;
 }
 
 .check-btn:hover {
@@ -339,8 +380,8 @@ select:hover, button:hover {
 }
 
 .check-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     stroke: var(--text-muted);
     stroke-width: 2.5;
     fill: none;
@@ -350,58 +391,153 @@ select:hover, button:hover {
     stroke: white;
 }
 
-/* Previous data */
-.previous-data {
+/* Previous data hint */
+.previous-hint {
     font-size: 0.7rem;
     color: var(--text-muted);
+    text-align: center;
     margin-top: 0.5rem;
     padding-top: 0.5rem;
     border-top: 1px dashed var(--border);
 }
 
-.previous-data strong {
+.previous-hint strong {
     color: var(--text-secondary);
+}
+
+/* Warmup Exercise (simpler) */
+.warmup-exercise {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--bg-card);
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.warmup-exercise:last-child {
+    margin-bottom: 0;
+}
+
+.warmup-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.warmup-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.warmup-duration {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: var(--bg-input);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    flex-shrink: 0;
+}
+
+/* Finish Workout Button */
+.finish-workout-container {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.finish-btn {
+    width: 100%;
+    padding: 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.finish-btn:hover {
+    background: var(--accent-hover);
+}
+
+.finish-btn.finished {
+    background: var(--success);
+}
+
+.finish-btn:disabled {
+    background: var(--bg-input);
+    color: var(--text-muted);
+    cursor: not-allowed;
 }
 
 /* Toast */
 .toast {
     position: fixed;
     bottom: 2rem;
-    right: 2rem;
-    padding: 1rem 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: 0.875rem 1.5rem;
     background: var(--success);
     color: white;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     font-weight: 500;
-    transform: translateY(100px);
     opacity: 0;
     transition: all 0.3s;
+    z-index: 1000;
 }
 
 .toast.show {
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
     opacity: 1;
 }
 
-/* Warmup special styling */
-.block.warmup .block-header {
-    background: rgba(139, 92, 246, 0.2);
-}
-
 /* Scrollbar */
-.day-content::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 6px;
 }
 
-.day-content::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.day-content::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: var(--border);
     border-radius: 3px;
 }
 
-.day-content::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: var(--text-muted);
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+    header {
+        padding: 1.25rem 2rem;
+    }
+    
+    header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .day-tabs {
+        max-width: 600px;
+        margin: 0 auto;
+        background: transparent;
+        border: none;
+        padding-top: 0.5rem;
+    }
+    
+    .day-tab {
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+    
+    .workout-view {
+        padding: 1.5rem;
+        padding-bottom: 4rem;
+    }
 }
