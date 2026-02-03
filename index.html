@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>🏋️ Workout Tracker</h1>
+        <div class="header-actions">
+            <select id="weekSelector"></select>
+            <button id="exportBtn" class="btn-secondary">Export Data</button>
+            <button id="clearWeekBtn" class="btn-danger">Clear Week</button>
+        </div>
+    </header>
+    
+    <main class="kanban-board" id="board">
+        <!-- Days will be injected by JS -->
+    </main>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="workouts.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
